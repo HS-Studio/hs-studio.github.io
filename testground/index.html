@@ -1,36 +1,75 @@
-
 <style>
-  
-:root {
+  :root {
     --font-color: light-dark(#1a1a18, #f5f4ee);
     --bg-color: light-dark(#f5f4ee, #1a1a18);
-}
-  body {background-color: var(--bg-color);}
-  .ctrl { display:flex; align-items:center; gap:8px; margin:4px 0; font-size:12px; color:var(--font-color); }
-  .ctrl label { width:90px; text-align:right; flex-shrink:0; }
-  .ctrl span { width:34px; text-align:right; flex-shrink:0; font-variant-numeric:tabular-nums; }
-  input[type=range] { flex:1; }
-  .section { font-size:11px; font-weight:500; color:var(--font-color); margin:10px 0 2px 98px; letter-spacing:.04em; text-transform:uppercase; }
+  }
+
+  body {
+    background-color: var(--bg-color);
+  }
+
+  .ctrl {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+    font-size: 12px;
+    color: var(--font-color);
+  }
+
+  .ctrl label {
+    width: 90px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .ctrl span {
+    width: 34px;
+    text-align: right;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  input[type=range] {
+    flex: 1;
+  }
+
+  .section {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--font-color);
+    margin: 10px 0 2px 98px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
 </style>
 
 <meta name="color-scheme" content="light dark">
 
 <div style="display:inline-block;padding:4px 12px 12px;">
-  <canvas id="cv" width="680" height="260" style="width:100%;display:block;"></canvas>
-  <div style="display:inline-block;gap:0 24px;padding:4px 12px 12px;">
+  <canvas id="cv" width="324" style="width:100%;display:block;"></canvas>
+  <div style="display:block; position: relative; left: -25px;">
     <div>
       <div class="section">Oben</div>
-      <div class="ctrl"><label>openness</label><input type="range" min="0" max="1" step="0.01" value="1.0" id="to"><span id="tos">1.0</span></div>
-      <div class="ctrl"><label>tilt</label><input type="range" min="-0.5" max="0.5" step="0.01" value="0.0" id="tt"><span id="tts">0.0</span></div>
-      <div class="ctrl"><label>curvature</label><input type="range" min="-1" max="1" step="0.01" value="0.0" id="tc"><span id="tcs">0.0</span></div>
-      <div class="ctrl"><label>roundness</label><input type="range" min="0" max="1" step="0.01" value="0.5" id="tr"><span id="trs">0.50</span></div>
+      <div class="ctrl"><label>openness</label><input type="range" min="0" max="1" step="0.01" value="1.0" id="to"><span
+          id="tos">1.0</span></div>
+      <div class="ctrl"><label>tilt</label><input type="range" min="-0.5" max="0.5" step="0.01" value="0.0"
+          id="tt"><span id="tts">0.0</span></div>
+      <div class="ctrl"><label>curvature</label><input type="range" min="-1" max="1" step="0.01" value="0.0"
+          id="tc"><span id="tcs">0.0</span></div>
+      <div class="ctrl"><label>roundness</label><input type="range" min="0" max="1" step="0.01" value="0.5"
+          id="tr"><span id="trs">0.50</span></div>
     </div>
     <div>
       <div class="section">Unten</div>
-      <div class="ctrl"><label>openness</label><input type="range" min="0" max="1" step="0.01" value="1.0" id="bo"><span id="bos">1.0</span></div>
-      <div class="ctrl"><label>tilt</label><input type="range" min="-0.5" max="0.5" step="0.01" value="0.0" id="bt"><span id="bts">0.0</span></div>
-      <div class="ctrl"><label>curvature</label><input type="range" min="-1" max="1" step="0.01" value="0.0" id="bc"><span id="bcs">0.0</span></div>
-      <div class="ctrl"><label>roundness</label><input type="range" min="0" max="1" step="0.01" value="0.5" id="br"><span id="brs">0.50</span></div>
+      <div class="ctrl"><label>openness</label><input type="range" min="0" max="1" step="0.01" value="1.0" id="bo"><span
+          id="bos">1.0</span></div>
+      <div class="ctrl"><label>tilt</label><input type="range" min="-0.5" max="0.5" step="0.01" value="0.0"
+          id="bt"><span id="bts">0.0</span></div>
+      <div class="ctrl"><label>curvature</label><input type="range" min="-1" max="1" step="0.01" value="0.0"
+          id="bc"><span id="bcs">0.0</span></div>
+      <div class="ctrl"><label>roundness</label><input type="range" min="0" max="1" step="0.01" value="0.5"
+          id="br"><span id="brs">0.50</span></div>
     </div>
   </div>
 </div>
@@ -38,176 +77,179 @@
 
 
 <script>
-const cv = document.getElementById('cv');
-const ctx = cv.getContext('2d');
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
 
-function getParams() {
-  const g = id => parseFloat(document.getElementById(id).value);
-  return {
-    top:    { openness: g('to'), tilt: g('tt'), curvature: g('tc'), roundness: g('tr') },
-    bottom: { openness: g('bo'), tilt: g('bt'), curvature: g('bc'), roundness: g('br') }
-  };
-}
-
-// Mirror of the C++ logic
-function buildEyePoints(cx, cy, W, H, top, bottom) {
-  const hw = W * 0.5, hh = H * 0.5;
-
-  // --- corner y positions (tilt + openness) ---
-  // top lid: openness controls how far up lid is (0=fully closed=cy, 1=fully open=cy-hh)
-  // tilt shifts left corner up, right corner down (for top lid)
-  const topOpen   = hh * top.openness;
-  const botOpen   = hh * bottom.openness;
-
-  const TL = { x: cx - hw, y: cy - topOpen  + top.tilt    * H };
-  const TR = { x: cx + hw, y: cy - topOpen  - top.tilt    * H };
-  const BL = { x: cx - hw, y: cy + botOpen  + bottom.tilt * H };
-  const BR = { x: cx + hw, y: cy + botOpen  - bottom.tilt * H };
-
-  // Shared vertical center for each x side
-  const midY_L = (TL.y + BL.y) * 0.5;
-  const midY_R = (TR.y + BR.y) * 0.5;
-
-  // --- roundness: inset corners ---
-  const rx = hw * top.roundness;   // use top roundness for x (shared)
-  const ry_TL = Math.abs(TL.y - midY_L) * top.roundness;
-  const ry_TR = Math.abs(TR.y - midY_R) * top.roundness;
-  const ry_BL = Math.abs(BL.y - midY_L) * bottom.roundness;
-  const ry_BR = Math.abs(BR.y - midY_R) * bottom.roundness;
-
-  const pts = [];
-
-  const ARC_STEPS = 6; // quarter circle
-
-  function arcPts(cornerX, cornerY, signX, signY, rx, ry) {
-    // quarter arc, signX/signY are ±1 indicating which quadrant
-    for (let i = 0; i <= ARC_STEPS; i++) {
-      const t = (i / ARC_STEPS) * Math.PI * 0.5;
-      const x = cornerX + signX * rx * (1 - Math.cos(t));
-      const y = cornerY + signY * ry * (1 - Math.sin(t));
-      pts.push({ x, y });
-    }
+  function getParams() {
+    const g = id => parseFloat(document.getElementById(id).value);
+    return {
+      top: { openness: g('to'), tilt: g('tt'), curvature: g('tc'), roundness: g('tr') },
+      bottom: { openness: g('bo'), tilt: g('bt'), curvature: g('bc'), roundness: g('br') }
+    };
   }
 
-  // --- curvature for top and bottom edges ---
-  // positive curvature bows the top edge outward (upward), bottom inward
-  const CURVE_STEPS = 12;
+  // Mirror of the C++ logic
+  function buildEyePoints(cx, cy, W, H, top, bottom) {
+    const hw = W * 0.5, hh = H * 0.5;
 
-  function edgePts(x0, y0, x1, y1, bow) {
-    // bow > 0 = arc upward, < 0 downward
-    const mx = (x0 + x1) * 0.5, my = (y0 + y1) * 0.5;
-    const perpY = -(x1 - x0); // perpendicular (rotated 90°, unnormalized)
-    const perpX =  (y1 - y0);
-    const len   = Math.sqrt(perpX*perpX + perpY*perpY);
-    const maxBow = H * 0.5;
-    for (let i = 0; i <= CURVE_STEPS; i++) {
-      const t = i / CURVE_STEPS;
-      const b = 4 * t * (1 - t) * bow * maxBow; // parabolic
-      const ix = x0 + (x1-x0)*t + (perpX/len)*b;
-      const iy = y0 + (y1-y0)*t + (perpY/len)*b;
-      pts.push({ x: ix, y: iy });
+    // --- corner y positions (tilt + openness) ---
+    // top lid: openness controls how far up lid is (0=fully closed=cy, 1=fully open=cy-hh)
+    // tilt shifts left corner up, right corner down (for top lid)
+    const topOpen = hh * top.openness;
+    const botOpen = hh * bottom.openness;
+
+    const TL = { x: cx - hw, y: cy - topOpen + top.tilt * H };
+    const TR = { x: cx + hw, y: cy - topOpen - top.tilt * H };
+    const BL = { x: cx - hw, y: cy + botOpen + bottom.tilt * H };
+    const BR = { x: cx + hw, y: cy + botOpen - bottom.tilt * H };
+
+    // Shared vertical center for each x side
+    const midY_L = (TL.y + BL.y) * 0.5;
+    const midY_R = (TR.y + BR.y) * 0.5;
+
+    // --- roundness: inset corners ---
+    const rx_T = hw * top.roundness;   // use top roundness for x (shared)
+    const rx_B = hw * bottom.roundness;
+    const ry_TL = Math.abs(TL.y - midY_L) * top.roundness;
+    const ry_TR = Math.abs(TR.y - midY_R) * top.roundness;
+    const ry_BL = Math.abs(BL.y - midY_L) * bottom.roundness;
+    const ry_BR = Math.abs(BR.y - midY_R) * bottom.roundness;
+
+    const pts = [];
+
+    const ARC_STEPS = 6; // quarter circle
+
+    function arcPts(cornerX, cornerY, signX, signY, rx, ry) {
+      // quarter arc, signX/signY are ±1 indicating which quadrant
+      for (let i = 0; i <= ARC_STEPS; i++) {
+        const t = (i / ARC_STEPS) * Math.PI * 0.5;
+        const x = cornerX + signX * rx * (1 - Math.cos(t));
+        const y = cornerY + signY * ry * (1 - Math.sin(t));
+        pts.push({ x, y });
+      }
+
     }
+
+    // --- curvature for top and bottom edges ---
+    // positive curvature bows the top edge outward (upward), bottom inward
+    const CURVE_STEPS = 12;
+
+    function edgePts(x0, y0, x1, y1, bow) {
+      // bow > 0 = arc upward, < 0 downward
+      const mx = (x0 + x1) * 0.5, my = (y0 + y1) * 0.5;
+      const perpY = -(x1 - x0); // perpendicular (rotated 90°, unnormalized)
+      const perpX = (y1 - y0);
+      const len = Math.sqrt(perpX * perpX + perpY * perpY);
+      const maxBow = H * 0.5;
+      for (let i = 0; i <= CURVE_STEPS; i++) {
+        const t = i / CURVE_STEPS;
+        const b = 4 * t * (1 - t) * bow * maxBow; // parabolic
+        const ix = x0 + (x1 - x0) * t + (perpX / len) * b;
+        const iy = y0 + (y1 - y0) * t + (perpY / len) * b;
+        pts.push({ x: ix, y: iy });
+      }
+    }
+
+    // Outline order: start top-left arc, top edge, top-right arc, right edge, bottom-right arc, bottom edge, bottom-left arc, left edge
+
+    // TOP-LEFT corner arc (comes from left edge going right)
+
+    arcPts(TL.x, TL.y, 1, 1, rx_T, ry_TL);
+
+    // TOP edge (TL → TR, top lid curves outward = bow up = negative y = -curvature)
+    // last point of arc is TL.x+rx, TL.y  — first point is TL, end is TR
+    edgePts(TL.x + rx_T, TL.y, TR.x - rx_T, TR.y, -top.curvature);
+
+    // TOP-RIGHT corner arc
+    arcPts(TR.x, TR.y, -1, 1, rx_T, ry_TR);
+
+    // RIGHT edge (TR → BR straight, tilt handles y)
+    pts.push({ x: TR.x, y: (TR.y + ry_TR) });
+    pts.push({ x: BR.x, y: (BR.y - ry_BR) });
+
+    // BOTTOM-RIGHT corner arc
+    arcPts(BR.x, BR.y, -1, -1, rx_B, ry_BR);
+
+    // BOTTOM edge (BR → BL, bottom lid curves inward = bow down = +curvature)
+    edgePts(BR.x - rx_B, BR.y, BL.x + rx_B, BL.y, bottom.curvature);
+
+    // BOTTOM-LEFT corner arc
+    arcPts(BL.x, BL.y, 1, -1, rx_B, ry_BL);
+
+    // LEFT edge
+    pts.push({ x: BL.x, y: BL.y - ry_BL });
+    pts.push({ x: TL.x, y: TL.y + ry_TL });
+
+    return pts;
   }
 
-  // Outline order: start top-left arc, top edge, top-right arc, right edge, bottom-right arc, bottom edge, bottom-left arc, left edge
+  function draw() {
+    const p = getParams();
+    const dpr = window.devicePixelRatio || 1;
+    cv.width = 324 * dpr;
+    cv.height = 260 * dpr;
+    cv.style.width = '324px';
+    cv.style.height = '260px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  // TOP-LEFT corner arc (comes from left edge going right)
-  arcPts(TL.x , TL.y , 1, 1, rx, ry_TL);
+    ctx.clearRect(0, 0, 324, 260);
 
-  // TOP edge (TL → TR, top lid curves outward = bow up = negative y = -curvature)
-  // last point of arc is TL.x+rx, TL.y  — first point is TL, end is TR
-  edgePts(TL.x + rx, TL.y, TR.x - rx, TR.y, -top.curvature);
+    const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+    const bg = isDark ? '#1a1a18' : '#f5f4ee';
+    const eyeCol = isDark ? '#17f2f6' : '#17f2f6';
+    const dotCol = isDark ? '#4a9eff' : '#2277dd';
+    const gridCol = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
+    const fontCol = isDark ? '#f5f4ee' : '#1a1a18';
 
-  // TOP-RIGHT corner arc
-  arcPts(TR.x, TR.y, -1, 1, rx, ry_TR);
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, 324, 260);
 
-  // RIGHT edge (TR → BR straight, tilt handles y)
-  pts.push({ x: TR.x, y: (TR.y + ry_TR) });
-  pts.push({ x: BR.x, y: (BR.y - ry_BR) });
+    // Two eyes
+    const eyes = [
+      { cx: 162, cy: 130, W: 200, H: 200 },
+      //{ cx: 495, cy: 130, W: 200, H: 200 },
+    ];
 
-  // BOTTOM-RIGHT corner arc
-  arcPts(BR.x, BR.y, -1, -1, rx, ry_BR);
+    eyes.forEach(e => {
+      const pts = buildEyePoints(e.cx, e.cy, e.W, e.H, p.top, p.bottom);
 
-  // BOTTOM edge (BR → BL, bottom lid curves inward = bow down = +curvature)
-  edgePts(BR.x - rx, BR.y, BL.x + rx, BL.y, bottom.curvature);
-
-  // BOTTOM-LEFT corner arc
-  arcPts(BL.x, BL.y, 1, -1, rx, ry_BL);
-
-  // LEFT edge
-  pts.push({ x: BL.x, y: BL.y - ry_BL });
-  pts.push({ x: TL.x, y: TL.y + ry_TL });
-
-  return pts;
-}
-
-function draw() {
-  const p = getParams();
-  const dpr = window.devicePixelRatio || 1;
-  cv.width  = 680 * dpr;
-  cv.height = 260 * dpr;
-  cv.style.width  = '680px';
-  cv.style.height = '260px';
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-  ctx.clearRect(0, 0, 680, 260);
-
-  const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
-  const bg     = isDark ? '#1a1a18' : '#f5f4ee';
-  const eyeCol = isDark ? '#e0ddd4' : '#1a1a18';
-  const dotCol = isDark ? '#4a9eff' : '#2277dd';
-  const gridCol= isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
-  const fontCol= isDark ? '#f5f4ee' : '#1a1a18';
-
-  ctx.fillStyle = bg;
-  ctx.fillRect(0, 0, 680, 260);
-
-  // Two eyes
-  const eyes = [
-    { cx: 185, cy: 130, W: 200, H: 200 },
-    { cx: 495, cy: 130, W: 200, H: 200 },
-  ];
-
-  eyes.forEach(e => {
-    const pts = buildEyePoints(e.cx, e.cy, e.W, e.H, p.top, p.bottom);
-
-    // filled shape
-    ctx.beginPath();
-    ctx.moveTo(pts[0].x, pts[0].y);
-    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
-    ctx.closePath();
-    ctx.fillStyle = eyeCol;
-    ctx.fill();
-
-    // dot outline for debugging
-    ctx.fillStyle = dotCol;
-    pts.forEach(pt => {
+      // filled shape
       ctx.beginPath();
-      ctx.arc(pt.x, pt.y, 2, 0, Math.PI*2);
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+      ctx.closePath();
+      ctx.fillStyle = eyeCol;
       ctx.fill();
+
+      // dot outline for debugging
+      ctx.fillStyle = dotCol;
+      pts.forEach(pt => {
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // pupil  
+      //ctx.beginPath();
+      //ctx.arc(e.cx, e.cy, 50, 0, Math.PI * 2);
+      //ctx.fillStyle = "grd";
+      //ctx.fill();
     });
+  }
 
-    // pupil  
-    //ctx.beginPath();
-    //ctx.arc(e.cx, e.cy - 10, 28, 0, Math.PI*2);
-    //ctx.fillStyle = bg;
-    //ctx.fill();
-  });
-}
-
-function bind(ids) {
-  ids.forEach(([slider, display]) => {
-    const s = document.getElementById(slider);
-    const d = document.getElementById(display);
-    s.addEventListener('input', () => {
-      d.textContent = parseFloat(s.value).toFixed(2);
-      draw();
+  function bind(ids) {
+    ids.forEach(([slider, display]) => {
+      const s = document.getElementById(slider);
+      const d = document.getElementById(display);
+      s.addEventListener('input', () => {
+        d.textContent = parseFloat(s.value).toFixed(2);
+        draw();
+      });
     });
-  });
-}
+  }
 
-bind([['to','tos'],['tt','tts'],['tc','tcs'],['tr','trs'],['bo','bos'],['bt','bts'],['bc','bcs'],['br','brs']]);
-draw();
-matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
-window.addEventListener('resize', draw);
+  bind([['to', 'tos'], ['tt', 'tts'], ['tc', 'tcs'], ['tr', 'trs'], ['bo', 'bos'], ['bt', 'bts'], ['bc', 'bcs'], ['br', 'brs']]);
+  draw();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
+  window.addEventListener('resize', draw);
 </script>
