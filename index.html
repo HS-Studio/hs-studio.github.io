@@ -1,624 +1,131 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>SDF Fluid Playground</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      background: #060610;
-      overflow: hidden;
-      font-family: 'Courier New', monospace;
-      touch-action: none;
-    }
-    canvas {
-      display: block;
-      width: 100vw;
-      height: 100vh;
-    }
-    #ui {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 14px 16px;
-      pointer-events: none;
-      z-index: 10;
-    }
-    #title {
-      color: rgba(120,230,255,0.65);
-      font-size: 11px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      font-weight: bold;
-      text-shadow: 0 0 14px rgba(100,220,255,0.35);
-      line-height: 1.6;
-    }
-    #title small {
-      display: block;
-      font-size: 8px;
-      letter-spacing: 2px;
-      opacity: 0.5;
-      margin-top: 2px;
-    }
-    #controls {
-      display: flex;
-      gap: 8px;
-      pointer-events: all;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-    .btn {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(120,230,255,0.2);
-      color: rgba(120,230,255,0.65);
-      font-family: 'Courier New', monospace;
-      font-size: 10px;
-      letter-spacing: 1px;
-      padding: 8px 13px;
-      cursor: pointer;
-      border-radius: 2px;
-      transition: all 0.18s;
-      text-transform: uppercase;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      min-width: 50px;
-      min-height: 40px;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-    .btn:hover, .btn.active {
-      background: rgba(120,230,255,0.12);
-      border-color: rgba(120,230,255,0.55);
-      box-shadow: 0 0 12px rgba(100,220,255,0.18);
-      color: #fff;
-    }
-    #bottom-ui {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      gap: 16px;
-      padding: 16px 12px 18px;
-      pointer-events: all;
-      z-index: 10;
-      flex-wrap: wrap;
-    }
-    .slider-group {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-    .slider-label {
-      color: rgba(120,230,255,0.4);
-      font-size: 9px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-    input[type=range] {
-      -webkit-appearance: none;
-      width: 78px;
-      height: 2px;
-      background: rgba(120,230,255,0.18);
-      border-radius: 2px;
-      outline: none;
-      cursor: pointer;
-    }
-    input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 16px;
-      height: 16px;
-      background: rgba(120,230,255,0.85);
-      border-radius: 50%;
-      cursor: pointer;
-      box-shadow: 0 0 10px rgba(100,220,255,0.45);
-    }
-    #hint {
-      position: fixed;
-      bottom: 78px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: rgba(120,230,255,0.28);
-      font-size: 10px;
-      letter-spacing: 3px;
-      text-align: center;
-      pointer-events: none;
-      transition: opacity 1.5s;
-      white-space: nowrap;
-    }
-    #fps {
-      position: fixed;
-      top: 50%;
-      left: 8px;
-      transform: translateY(-50%);
-      color: rgba(255,255,255,0.15);
-      font-size: 9px;
-      letter-spacing: 1px;
-      pointer-events: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekte</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --card-bg: #f5f5f5;
+            --card-border: #e0e0e0;
+            --hover-bg: #e8e8e8;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --text-color: #e0e0e0;
+                --card-bg: #1e1e1e;
+                --card-border: #333333;
+                --hover-bg: #2d2d2d;
+                --shadow: rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 2rem;
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-color);
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--shadow);
+            background-color: var(--hover-bg);
+        }
+
+        .project-card h2 {
+            margin: 0 0 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .project-card p {
+            margin: 0;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .projects {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <canvas id="c"></canvas>
-  <div id="ui">
-    <div id="title">
-      SDF · FLUID
-      <small>METABALL PLAYGROUND</small>
+    <header>
+        <h1>Projekte</h1>
+    </header>
+
+    <div class="projects">
+        <a href="sdf_playground/index.html" class="project-card">
+            <h2>SDF Playground</h2>
+            <p>Experimentierfeld für Signed Distance Functions</p>
+        </a>
+
+        <a href="eye_params/index.html" class="project-card">
+            <h2>Eye Parameters</h2>
+            <p>Tool zur Anpassung von Augenparametern</p>
+        </a>
+
+        <a href="tft_colorpicker/index.html" class="project-card">
+            <h2>TFT Color Picker</h2>
+            <p>Farbauswahl für TFT-Displays</p>
+        </a>
     </div>
-    <div id="controls">
-      <button class="btn active" id="modeAdd">+ SPAWN</button>
-      <button class="btn" id="modeRepel">⊗ REPEL</button>
-      <button class="btn" id="modeVacuum">⍟ VACUUM</button>
-      <button class="btn" id="modeVortex">↺ VORTEX</button>
-      <button class="btn" id="btnClear">CLEAR</button>
-      <button class="btn" id="btnFullscreen">⛶</button>
-    </div>
-  </div>
-  <div id="bottom-ui">
-    <div class="slider-group">
-      <span class="slider-label">Radius</span>
-      <input type="range" id="slRadius" min="0.02" max="0.18" step="0.005" value="0.07">
-    </div>
-    <div class="slider-group">
-      <span class="slider-label">Smooth</span>
-      <input type="range" id="slSmooth" min="0.005" max="0.28" step="0.005" value="0.09">
-    </div>
-    <div class="slider-group">
-      <span class="slider-label">Speed</span>
-      <input type="range" id="slSpeed" min="0.1" max="3.0" step="0.05" value="0.7">
-    </div>
-    <div class="slider-group">
-      <span class="slider-label">Glow</span>
-      <input type="range" id="slGlow" min="0.0" max="1.0" step="0.05" value="0.65">
-    </div>
-    <div class="slider-group">
-      <span class="slider-label">Gravity</span>
-      <input type="range" id="slGravity" min="0.0" max="0.00050" step="0.00001" value="0.00012">
-    </div>
-  </div>
-  <div id="hint">
-    TOUCH TO SPAWN FLUID DROPS
-  </div>
-  <div id="fps"></div>
 
-  <script>
-    // ===================== WebGL Setup =====================
-    const canvas = document.getElementById('c');
-    const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
-    if (!gl) {
-      document.body.innerHTML = '<p style="color:cyan;padding:40px;font-family:monospace">WebGL not available on this device.</p>'; throw 0;
-    }
-
-    const isWebGL2 = typeof WebGL2RenderingContext !== 'undefined' && gl instanceof WebGL2RenderingContext;
-
-    const vsrc = isWebGL2 ? `#version 300 es
-    precision highp float;
-    in vec2 a_pos;
-    out vec2 vUv;
-    void main() { vUv = a_pos*0.5+0.5; gl_Position = vec4(a_pos,0,1); }
-    `: `
-    attribute vec2 a_pos;
-    varying vec2 vUv;
-    void main() { vUv = a_pos*0.5+0.5; gl_Position = vec4(a_pos,0,1); }
-    `;
-
-    const fsrc = isWebGL2 ? `#version 300 es
-    precision highp float;
-    in vec2 vUv;
-    out vec4 fragColor;
-    const int MAX = 48;
-    uniform vec2 u_res;
-    uniform float u_time;
-    uniform int u_count;
-    uniform vec2 u_pos[MAX];
-    uniform float u_rad[MAX];
-    uniform vec3 u_col[MAX];
-    uniform float u_smooth;
-    uniform float u_glow;
-
-    float smin(float a,float b,float k){
-    float h=clamp(0.5+0.5*(b-a)/k,0.0,1.0);
-    return mix(b,a,h)-k*h*(1.0-h);
-    }
-    vec3 sminC(float a,float b,float k,vec3 ca,vec3 cb){
-    float h=clamp(0.5+0.5*(b-a)/k,0.0,1.0);
-    return mix(cb,ca,h);
-    }
-
-    void main(){
-    vec2 asp=vec2(u_res.x/u_res.y,1.0);
-    vec2 uv=vUv*asp;
-    vec3 bg=vec3(0.025,0.015,0.055);
-    if(u_count==0){ fragColor=vec4(bg,1); return; }
-
-    float d=length(uv - u_pos[0]*asp)-u_rad[0];
-    vec3 col=u_col[0];
-    for(int i=1;i<MAX;i++){
-    if(i>=u_count) break;
-    float d2=length(uv - u_pos[i]*asp)-u_rad[i];
-    col=sminC(d,d2,u_smooth,col,u_col[i]);
-    d=smin(d,d2,u_smooth);
-    }
-
-    // Rim
-    float rim=1.0-smoothstep(-0.003,0.022,d);
-    vec3 fluid=col+rim*0.7*(col*0.4+0.5);
-    // Interior depth
-    float interior=smoothstep(0.0,-0.1,d);
-    fluid=mix(fluid*0.55,fluid*1.15,interior);
-    // Specular highlight
-    float spec=pow(max(0.0,rim-0.5)*2.0,3.0);
-    fluid+=spec*0.5;
-    // Mask
-    float mask=1.0-smoothstep(-0.002,0.005,d);
-    // Glow
-    float glowF=u_glow*exp(-max(d,0.0)*16.0)*0.8;
-    vec3 finalC=bg+col*glowF;
-    finalC=mix(finalC,fluid,mask);
-    // Grain
-    float n=fract(sin(dot(vUv*280.0+u_time*0.08,vec2(127.1,311.7)))*43758.5);
-    finalC+=(n-0.5)*0.011;
-    // Vignette
-    float vign=1.0-smoothstep(0.45,1.35,length((vUv-0.5)*asp));
-    finalC*=0.82+0.18*vign;
-    fragColor=vec4(clamp(finalC,0.0,1.0),1.0);
-    }
-    `: `
-    precision highp float;
-    varying vec2 vUv;
-    const int MAX = 48;
-    uniform vec2 u_res;
-    uniform float u_time;
-    uniform int u_count;
-    uniform vec2 u_pos[MAX];
-    uniform float u_rad[MAX];
-    uniform vec3 u_col[MAX];
-    uniform float u_smooth;
-    uniform float u_glow;
-
-    float smin(float a,float b,float k){
-    float h=clamp(0.5+0.5*(b-a)/k,0.0,1.0);
-    return mix(b,a,h)-k*h*(1.0-h);
-    }
-    vec3 sminC(float a,float b,float k,vec3 ca,vec3 cb){
-    float h=clamp(0.5+0.5*(b-a)/k,0.0,1.0);
-    return mix(cb,ca,h);
-    }
-
-    void main(){
-    vec2 asp=vec2(u_res.x/u_res.y,1.0);
-    vec2 uv=vUv*asp;
-    vec3 bg=vec3(0.025,0.015,0.055);
-    if(u_count==0){ gl_FragColor=vec4(bg,1.0); return; }
-
-    float d=length(uv-u_pos[0]*asp)-u_rad[0];
-    vec3 col=u_col[0];
-    for(int i=1;i<MAX;i++){
-    if(i>=u_count) break;
-    float d2=length(uv-u_pos[i]*asp)-u_rad[i];
-    col=sminC(d,d2,u_smooth,col,u_col[i]);
-    d=smin(d,d2,u_smooth);
-    }
-    float rim=1.0-smoothstep(-0.003,0.022,d);
-    vec3 fluid=col+rim*0.7*(col*0.4+0.5);
-    float interior=smoothstep(0.0,-0.1,d);
-    fluid=mix(fluid*0.55,fluid*1.15,interior);
-    float spec=pow(max(0.0,rim-0.5)*2.0,3.0);
-    fluid+=spec*0.5;
-    float mask=1.0-smoothstep(-0.002,0.005,d);
-    float glowF=u_glow*exp(-max(d,0.0)*16.0)*0.8;
-    vec3 finalC=bg+col*glowF;
-    finalC=mix(finalC,fluid,mask);
-    float n=fract(sin(dot(vUv*280.0+u_time*0.08,vec2(127.1,311.7)))*43758.5);
-    finalC+=(n-0.5)*0.011;
-    float vign=1.0-smoothstep(0.45,1.35,length((vUv-0.5)*asp));
-    finalC*=0.82+0.18*vign;
-    gl_FragColor=vec4(clamp(finalC,0.0,1.0),1.0);
-    }
-    `;
-
-    function mkShader(type, src) {
-      const s = gl.createShader(type);
-      gl.shaderSource(s, src); gl.compileShader(s);
-      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS))
-        console.error('Shader error:', gl.getShaderInfoLog(s));
-      return s;
-    }
-    const prog = gl.createProgram();
-    gl.attachShader(prog, mkShader(gl.VERTEX_SHADER, vsrc));
-    gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, fsrc));
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) console.error(gl.getProgramInfoLog(prog));
-    gl.useProgram(prog);
-
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-    const al = gl.getAttribLocation(prog, 'a_pos');
-    gl.enableVertexAttribArray(al);
-    gl.vertexAttribPointer(al, 2, gl.FLOAT, false, 0, 0);
-
-    const U = name => gl.getUniformLocation(prog, name);
-    const uRes = U('u_res'), uTime = U('u_time'), uCount = U('u_count');
-    const uPos = U('u_pos'), uRad = U('u_rad'), uCol = U('u_col');
-    const uSmooth = U('u_smooth'), uGlow = U('u_glow');
-
-    // ===================== State =====================
-    const MAX_BALLS = 48;
-    let balls = [];
-    let mode = 'add';
-    let hue = Math.random();
-
-    function hsv2rgb(h, s, v) {
-      const i = Math.floor(h*6),
-      f = h*6-i;
-      const p = v*(1-s),
-      q = v*(1-f*s),
-      t = v*(1-(1-f)*s);
-      switch (i%6) {
-        case 0: return[v,
-          t,
-          p]; case 1: return[q,
-          v,
-          p]; case 2: return[p,
-          v,
-          t];
-        case 3: return[p,
-            q,
-            v]; case 4: return[t,
-            p,
-            v]; case 5: return[v,
-            p,
-            q];
-      }
-    }
-    function nextColor() {
-      hue = (hue+0.11+Math.random()*0.05)%1.0;
-      return hsv2rgb(hue, 0.7+Math.random()*0.25, 0.9+Math.random()*0.1);
-    }
-
-    function spawnBall(nx, ny) {
-      if (balls.length >= MAX_BALLS) balls.shift();
-      const R = +document.getElementById('slRadius').value;
-      balls.push({
-        x: nx, y: ny,
-        vx: (Math.random()-0.5)*0.003,
-        vy: (Math.random()-0.5)*0.003 + 0.001,
-        r: R*(0.55+Math.random()*0.9),
-        col: nextColor(),
-        life: 1.0,
-        decay: 0.0004+Math.random()*0.0004,
-    });
-  }
-
-  // ===================== Input =====================
-  const hint = document.getElementById('hint');
-  const pointers = new Map();
-  let spawnT = 0;
-  let hintShown = true;
-
-  function normXY(e) {
-    const r = canvas.getBoundingClientRect();
-    return [
-      (e.clientX - r.left) / r.width,
-      1 - (e.clientY - r.top) / r.height
-    ];
-  }
-
-  canvas.addEventListener('pointerdown', e => {
-    e.preventDefault();
-    const [x, y] = normXY(e);
-    pointers.set(e.pointerId, {
-      x, y, m: mode
-  });
-    if (mode === 'add') spawnBall(x, y);
-    if (hintShown) {
-      hint.style.opacity = '0'; hintShown = false;
-    }
-  }, {
-    passive: false
-  });
-
-canvas.addEventListener('pointermove', e => {
-  e.preventDefault();
-  if (!pointers.has(e.pointerId)) return;
-  const [x,
-    y] = normXY(e);
-  const prev = pointers.get(e.pointerId);
-  pointers.set(e.pointerId, {
-    x, y, m: prev.m
-  });
-}, {
-  passive: false
-});
-
-canvas.addEventListener('pointerup', e => {
-  e.preventDefault(); pointers.delete(e.pointerId);
-}, {
-  passive: false
-});
-canvas.addEventListener('pointercancel', e => {
-  e.preventDefault(); pointers.delete(e.pointerId);
-}, {
-  passive: false
-});
-canvas.addEventListener('contextmenu', e => e.preventDefault());
-
-// Buttons
-function setMode(m) {
-  mode = m;
-  document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-}
-document.getElementById('modeAdd').onclick = () => {
-  setMode('add'); document.getElementById('modeAdd').classList.add('active');
-};
-document.getElementById('modeRepel').onclick = () => {
-  setMode('repel'); document.getElementById('modeRepel').classList.add('active');
-};
-document.getElementById('modeVortex').onclick = () => {
-  setMode('vortex'); document.getElementById('modeVortex').classList.add('active');
-};
-document.getElementById('modeVacuum').onclick = () => {
-  setMode('vacuum'); document.getElementById('modeVacuum').classList.add('active');
-};
-document.getElementById('btnClear').onclick = () => {
-  balls = [];
-};
-
-// ===================== Resize =====================
-function resize() {
-  const dpr = Math.min(window.devicePixelRatio || 1,
-    2.5);
-  canvas.width = Math.round(window.innerWidth * dpr);
-  canvas.height = Math.round(window.innerHeight * dpr);
-  gl.viewport(0,
-    0,
-    canvas.width,
-    canvas.height);
-}
-window.addEventListener('resize', resize);
-resize();
-
-// ===================== Simulation =====================
-function sim(dt) {
-  const speed = +document.getElementById('slSpeed').value;
-  const gravity = +document.getElementById('slGravity').value;
-  spawnT += dt;
-
-  pointers.forEach(({
-    x, y, m
-  }) => {
-    if (m === 'add' && spawnT > 0.09) {
-      spawnT = 0;
-      spawnBall(x, y);
-    }
-    balls.forEach(b => {
-      const dx = b.x - x, dy = b.y - y;
-      const dist = Math.sqrt(dx*dx+dy*dy)+0.0001;
-      const inf = Math.max(0, 0.22-dist);
-      if (m === 'repel') {
-        const f = inf*0.018/dist;
-        b.vx += dx*f; b.vy += dy*f;
-      } else if (m === 'vacuum') {
-        const f = inf*0.018/dist;
-        b.vx -= dx*f; b.vy -= dy*f;
-      } else if (m === 'vortex') {
-        const f = inf*0.014/dist;
-        b.vx += -dy*f; b.vy += dx*f;
-      }
-  });
-  });
-
-for (let i = balls.length-1; i >= 0; i--) {
-  const b = balls[i];
-  b.vy -= gravity * speed;
-  b.vx *= 0.994;
-  b.vy *= 0.994;
-  b.x += b.vx * speed;
-  b.y += b.vy * speed;
-
-  // Wall bounce
-  if (b.x < 0) {
-    b.x = 0; b.vx = Math.abs(b.vx)*0.55;
-  }
-  if (b.x > 1) {
-    b.x = 1; b.vx=-Math.abs(b.vx)*0.55;
-  }
-  if (b.y < 0) {
-    b.y = 0; b.vy = Math.abs(b.vy)*0.55; b.vx *= 0.9;
-  }
-  if (b.y > 1) {
-    b.y = 1; b.vy=-Math.abs(b.vy)*0.55;
-  }
-
-  // Soft pressure between balls
-  for (let j = i-1; j >= 0; j--) {
-    const o = balls[j];
-    const dx = b.x-o.x,
-    dy = b.y-o.y;
-    const d2 = dx*dx+dy*dy;
-    const md = (b.r+o.r)*0.45;
-    if (d2 < md*md && d2 > 1e-8) {
-      const dist = Math.sqrt(d2);
-      const push = (md-dist)/dist*0.0012;
-      b.vx += dx*push; b.vy += dy*push;
-      o.vx -= dx*push; o.vy -= dy*push;
-    }
-  }
-
-  b.life -= b.decay;
-  if (b.life <= 0) balls.splice(i, 1);
-}
-}
-
-// ===================== Render =====================
-const posArr = new Float32Array(MAX_BALLS*2);
-const radArr = new Float32Array(MAX_BALLS);
-const colArr = new Float32Array(MAX_BALLS*3);
-
-let lastT = performance.now();
-let fpsT = 0, fpsFrames = 0;
-const fpsEl = document.getElementById('fps');
-
-function frame(now) {
-requestAnimationFrame(frame);
-const dt = Math.min((now-lastT)/1000, 0.05);
-lastT = now;
-
-// FPS counter
-fpsT += dt; fpsFrames++;
-if (fpsT > 1.0) {
-fpsEl.textContent = Math.round(fpsFrames/fpsT)+' FPS'; fpsT = 0; fpsFrames = 0;
-}
-
-sim(dt);
-
-const n = Math.min(balls.length, MAX_BALLS);
-for (let i = 0; i < n; i++) {
-posArr[i*2] = balls[i].x; posArr[i*2+1] = balls[i].y;
-radArr[i] = balls[i].r*Math.max(0, balls[i].life);
-colArr[i*3] = balls[i].col[0]; colArr[i*3+1] = balls[i].col[1]; colArr[i*3+2] = balls[i].col[2];
-}
-
-gl.uniform2f(uRes, canvas.width, canvas.height);
-gl.uniform1f(uTime, now*0.001);
-gl.uniform1i(uCount, n);
-if (n > 0) {
-gl.uniform2fv(uPos, posArr.subarray(0, n*2));
-gl.uniform1fv(uRad, radArr.subarray(0, n));
-gl.uniform3fv(uCol, colArr.subarray(0, n*3));
-}
-gl.uniform1f(uSmooth, +document.getElementById('slSmooth').value);
-gl.uniform1f(uGlow, +document.getElementById('slGlow').value);
-
-gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-}
-requestAnimationFrame(frame);
-
-const btnFS = document.getElementById('btnFullscreen');
-
-btnFS.onclick = () => {
-if (!document.fullscreenElement) {
-document.documentElement.requestFullscreen().catch(err => {
-console.error("Fullscreen error:", err);
-});
-} else {
-document.exitFullscreen();
-}
-};
-
-</script>
+    <footer>
+        <p>© 2026 Heiko Schulz</p>
+    </footer>
 </body>
 </html>
