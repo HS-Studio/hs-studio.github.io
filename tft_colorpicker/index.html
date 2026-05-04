@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TFT Color-Picker/Converter</title>
+    <meta name="color-scheme" content="light dark">
+    <style>
+        :root {
+            --font-color: light-dark(#1a1a1a, #f5f5f5);
+            --bg-color: light-dark(white, black);
+            --bg-color2: light-dark(#f0f0f0, #0f0f0f);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: var(--bg-color2);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .slider-container {
+            margin-bottom: 15px;
+        }
+
+        .slider-label {
+            display: inline-block;
+            width: 80px;
+            font-weight: bold;
+        }
+
+        .slider-value {
+            display: inline-block;
+            width: 40px;
+            text-align: right;
+        }
+
+        .color-display-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+
+        .color-display {
+            width: 150px;
+            height: 150px;
+            border: 2px solid rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+            font-weight: bold;
+            font-size: 12px;
+            border-radius: 5%;
+        }
+
+        .output {
+            background-color: var(--bg-color2);
+            color: var(--font-color);
+            padding: 10px;
+            border-radius: 8px;
+            border: 0.1em solid rgba(0, 0, 0, 0.1);
+            ;
+            font-family: "Courier New", monospace;
+            white-space: pre;
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            padding: 5px;
+            width: 100px;
+        }
+
+        button {
+            padding: 5px 10px;
+            background-color: var(--bg-color2);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--font-color);
+        }
+
+        input[type="range"] {
+            width: 200px;
+        }
+
+        .color-label {
+            margin-top: 5px;
+            font-size: 11px;
+            color: var(--font-color);
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- <h1>Farb-Converter mit Komprimierungsvergleich</h1> -->
+
+        <!-- Slider für RGB-Werte -->
+        <div class="slider-container">
+            <label class="slider-label">Rot (R):</label>
+            <input type="range" id="slider_r" min="0" max="255" value="128" class="slider"
+                style="background-color: #ffcccc;">
+            <span class="slider-value" id="label_r">128</span>
+        </div>
+
+        <div class="slider-container">
+            <label class="slider-label">Grün (G):</label>
+            <input type="range" id="slider_g" min="0" max="255" value="128" class="slider"
+                style="background-color: #ccffcc;">
+            <span class="slider-value" id="label_g">128</span>
+        </div>
+
+        <div class="slider-container">
+            <label class="slider-label">Blau (B):</label>
+            <input type="range" id="slider_b" min="0" max="255" value="128" class="slider"
+                style="background-color: #ccccff;">
+            <span class="slider-value" id="label_b">128</span>
+        </div>
+
+        <!-- Hex-Eingabe -->
+        <div>
+            <label for="hex_input"><strong>Hex-Eingabe:</strong></label>
+            <input type="text" id="hex_input" placeholder="z.B. FF00FF">
+            <button onclick="parseHexInput()">Anwenden</button>
+        </div>
+
+        <!-- Farb-Anzeigen -->
+        <div class="color-display-container">
+            <div>
+                <div class="color-display" id="color_display_888" style="background-color: #808080;">
+                </div>
+                <div class="color-label">RGB888 (24 Bit)</div>
+            </div>
+            <div>
+                <div class="color-display" id="color_display_565" style="background-color: #808080;">
+                </div>
+                <div class="color-label">RGB565 (16 Bit)</div>
+            </div>
+            <div>
+                <div class="color-display" id="color_display_332" style="background-color: #808080;">
+                </div>
+                <div class="color-label">RGB332 (8 Bit)</div>
+            </div>
+        </div>
+
+        <!-- Ausgabe der Farbformate -->
+        <div class="output" id="output_text">
+            (R, G, B): (128, 128, 128)
+            HEX RGB332: #00
+            HEX RGB565: #8000
+            HEX RGB888: #808080
+
+            Dezimal RGB332: 0
+            Dezimal RGB565: 32768
+            Dezimal RGB888: 8421376
+        </div>
+    </div>
+
+    <script>
+        // Initialisierung
+        document.addEventListener('DOMContentLoaded', () => {
+            updateColor();
+        });
+        matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateColor);
+
+        // Slider-Event-Listener
+        document.getElementById("slider_r").addEventListener("input", updateColor);
+        document.getElementById("slider_g").addEventListener("input", updateColor);
+        document.getElementById("slider_b").addEventListener("input", updateColor);
+
+        // Funktion zum Aktualisieren der Farbe
+        function updateColor() {
+            const r = parseInt(document.getElementById("slider_r").value);
+            const g = parseInt(document.getElementById("slider_g").value);
+            const b = parseInt(document.getElementById("slider_b").value);
+
+            // Labels aktualisieren
+            document.getElementById("label_r").textContent = r;
+            document.getElementById("label_g").textContent = g;
+            document.getElementById("label_b").textContent = b;
+
+            // Originalfarbe (RGB888)
+            const hex888 = toRgb888(r, g, b);
+            document.getElementById("color_display_888").style.backgroundColor = `#${hex888}`;
+            document.getElementById("color_display_888").textContent = `#${hex888}`;
+
+            // RGB565-Farbe (16 Bit)
+            const rgb565 = toRgb565(r, g, b);
+            const [r565, g565, b565] = parseRgb565(rgb565);
+            const hex565 = toRgb888(r565, g565, b565);
+            document.getElementById("color_display_565").style.backgroundColor = `#${hex565}`;
+            document.getElementById("color_display_565").textContent = `#${rgb565}`;
+
+            // RGB332-Farbe (8 Bit)
+            const rgb332 = toRgb332(r, g, b);
+            const [r332, g332, b332] = parseRgb332(rgb332);
+            const hex332 = toRgb888(r332, g332, b332);
+            document.getElementById("color_display_332").style.backgroundColor = `#${hex332}`;
+            document.getElementById("color_display_332").textContent = `#${rgb332}`;
+
+            // Ausgabe aktualisieren
+            const output = `(R, G, B):        (${r}, ${g}, ${b})
+HEX RGB332:       #${rgb332}
+HEX RGB565:       #${rgb565}
+HEX RGB888:       #${hex888}
+
+Dezimal RGB332:   ${parseInt(rgb332, 16)}
+Dezimal RGB565:   ${parseInt(rgb565, 16)}
+Dezimal RGB888:   ${parseInt(hex888, 16)}`;
+
+            document.getElementById("output_text").textContent = output;
+        }
+
+        // Funktion zum Parsen der Hex-Eingabe
+        function parseHexInput() {
+            const hexValue = document.getElementById("hex_input").value.trim().replace("#", "").toUpperCase();
+            let r, g, b;
+
+            try {
+                if (hexValue.length === 2) {
+                    const value = parseInt(hexValue, 16);
+                    r = ((value >> 5) & 0x7) << 5;
+                    g = ((value >> 2) & 0x7) << 5;
+                    b = (value & 0x3) << 6;
+                } else if (hexValue.length === 4) {
+                    const value = parseInt(hexValue, 16);
+                    r = ((value >> 11) & 0x1F) << 3;
+                    g = ((value >> 5) & 0x3F) << 2;
+                    b = (value & 0x1F) << 3;
+                } else if (hexValue.length === 6) {
+                    r = parseInt(hexValue.substring(0, 2), 16);
+                    g = parseInt(hexValue.substring(2, 4), 16);
+                    b = parseInt(hexValue.substring(4, 6), 16);
+                } else {
+                    throw new Error("Ungültige Hex-Länge. Erwartet: 2, 4 oder 6 Zeichen.");
+                }
+
+                // Slider aktualisieren
+                document.getElementById("slider_r").value = r;
+                document.getElementById("slider_g").value = g;
+                document.getElementById("slider_b").value = b;
+                updateColor();
+
+            } catch (e) {
+                alert(`Fehler: ${e.message}`);
+            }
+        }
+
+        // Hilfsfunktionen für Farbkonvertierungen
+        function toRgb888(r, g, b) {
+            return `${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`.toUpperCase();
+        }
+
+        function toRgb565(r, g, b) {
+            const r5 = (r >> 3) & 0x1F;
+            const g6 = (g >> 2) & 0x3F;
+            const b5 = (b >> 3) & 0x1F;
+            const value = (r5 << 11) | (g6 << 5) | b5;
+            return value.toString(16).padStart(4, '0').toUpperCase();
+        }
+
+        function toRgb332(r, g, b) {
+            const r3 = (r >> 5) & 0x7;
+            const g3 = (g >> 5) & 0x7;
+            const b2 = (b >> 6) & 0x3;
+            const value = (r3 << 5) | (g3 << 2) | b2;
+            return value.toString(16).padStart(2, '0').toUpperCase();
+        }
+
+        // Funktion zum Rückkonvertieren von RGB565 zu RGB888
+        function parseRgb565(hex565) {
+            const value = parseInt(hex565, 16);
+            const r5 = (value >> 11) & 0x1F;
+            const g6 = (value >> 5) & 0x3F;
+            const b5 = value & 0x1F;
+            // Skalierung auf 8 Bit
+            const r = (r5 << 3) | (r5 >> 2); // 5 Bit → 8 Bit
+            const g = (g6 << 2) | (g6 >> 4); // 6 Bit → 8 Bit
+            const b = (b5 << 3) | (b5 >> 2); // 5 Bit → 8 Bit
+            return [r, g, b];
+        }
+
+        // Funktion zum Rückkonvertieren von RGB332 zu RGB888
+        function parseRgb332(hex332) {
+            const value = parseInt(hex332, 16);
+            const r3 = (value >> 5) & 0x7;
+            const g3 = (value >> 2) & 0x7;
+            const b2 = value & 0x3;
+            // Skalierung auf 8 Bit
+            const r = (r3 << 5) | (r3 << 2) | (r3 >> 1); // 3 Bit → 8 Bit
+            const g = (g3 << 5) | (g3 << 2) | (g3 >> 1); // 3 Bit → 8 Bit
+            const b = (b2 << 6) | (b2 << 4) | (b2 << 2) | b2; // 2 Bit → 8 Bit
+            return [r, g, b];
+        }
+    </script>
+</body>
+
+</html>
