@@ -1,0 +1,101 @@
+:root {
+    --bg-color: light-dark(#ffffff, #121212);
+    --text-color: light-dark(#333333, #e0e0e0);
+    --card-bg: light-dark(#f5f5f5, #1e1e1e);
+    --card-border: light-dark(#e0e0e0, #333333);
+    --border-color: light-dark(#e0e0e0, #404040);
+    --hover-bg: light-dark(#e8e8e8, #2d2d2d);
+    --thumb-color: light-dark(#ffffff, #202020);
+    --shadow: light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-color);
+    margin: 0;
+    padding: 2rem;
+    transition: background-color 0.3s, color 0.3s;
+    min-height: 100vh;
+    touch-action: manipulation;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+footer {
+    text-align: center;
+    margin-top: 3rem;
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+h1 {
+    font-size: 1.5em;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--text-color);
+}
+
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    background-color: var(--card-bg);
+    padding: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 10px 20px var(--shadow);
+    box-sizing: border-box;
+}
+
+input[type="range"] {
+    background: var(--border-color);
+    min-width: 100px;
+    flex: 1;
+    height: 8px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--bg-color);
+    border-radius: 8px;
+    outline: none;
+    border: 2px solid var(--border-color);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--thumb-color);
+    border: 2px solid var(--border-color);
+    box-shadow: 2px 2px 5px var(--shadow);
+}
+
+input[type="range"]::-moz-range-thumb {
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--thumb-color);;
+    border: 2px solid var(--border-color);
+    box-shadow: 2px 2px 5px var(--shadow);
+}
+
+@media (min-width: 600px) {
+    .container {
+        max-width: 500px;
+    }
+
+    canvas {
+        max-height: 400px;
+    }
+}
