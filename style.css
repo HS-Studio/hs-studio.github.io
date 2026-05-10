@@ -1,12 +1,13 @@
 :root {
     --bg-color: light-dark(#ffffff, #121212);
     --text-color: light-dark(#333333, #e0e0e0);
-    --card-bg: light-dark(#f5f5f5, #1e1e1e);
+    --card-bg: light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.05));
     --card-border: light-dark(#e0e0e0, #333333);
     --border-color: light-dark(#e0e0e0, #404040);
     --hover-bg: light-dark(#e8e8e8, #2d2d2d);
     --thumb-color: light-dark(#ffffff, #202020);
     --shadow: light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+    --particle-color: light-dark(rgba(80, 80, 80, 1.0), rgba(150, 150, 150, 1.0));
 }
 
 body {
@@ -16,7 +17,6 @@ body {
     margin: 0;
     padding: 2rem;
     transition: background-color 0.3s, color 0.3s;
-    min-height: 100vh;
     touch-action: manipulation;
 }
 
@@ -88,6 +88,8 @@ a {
     text-decoration: none;
     color: inherit;
     display: block;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .project-card:hover {
@@ -156,7 +158,7 @@ input[type="range"]::-moz-range-thumb {
         max-width: 500px;
     }
 
-    canvas {
+    .cv {
         max-height: 400px;
     }
 }
