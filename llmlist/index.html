@@ -3,13 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="color-scheme" content="light dark">
     <title>LLM List</title>
     <link rel="stylesheet" href="../style.css">
     <style>
         ul {
-            max-width: 150px;
+            min-width: 200px;
+            margin: 0 auto;
         }
-
         li {
             display: block;
             padding: 2px;
@@ -23,41 +24,43 @@
 
 <body>
     <h1>LLM List</h1>
-    <ul class="smallist">
-        <li><a class="project-card" href="https://chatgpt.com/">ChatGPT</a></li>
-        <li><a class="project-card" href="https://claude.ai/">Claude</a></li>
-        <li><a class="project-card" href="https://copilot.microsoft.com/">Microsoft Copilot</a></li>
-        <li><a class="project-card" href="https://gemini.google.com/">Google Gemini</a></li>
-        <li><a class="project-card" href="https://notebooklm.google.com/">NotebookLM</a></li>
-        <li><a class="project-card" href="https://duck.ai/">Duck.ai</a></li>
-        <li><a class="project-card" href="https://grok.com/">Grok</a></li>
-        <li><a class="project-card" href="https://www.perplexity.ai/">Perplexity</a></li>
-        <li><a class="project-card" href="https://poe.com/">Poe</a></li>
-        <li><a class="project-card" href="https://www.kimi.com/">Kimi</a></li>
-        <li><a class="project-card" href="https://chat.deepseek.com/">DeepSeek Chat</a></li>
-        <li><a class="project-card" href="https://mistral.ai/">Mistral AI</a></li>
-        <li><a class="project-card" href="https://meta.ai/">Meta AI</a></li>
-        <li><a class="project-card" href="https://www.you.com/">You.com</a></li>
-        <li><a class="project-card" href="https://huggingface.co/chat/">HuggingChat</a></li>
-        <li><a class="project-card" href="https://qwen.ai/">Qwen</a></li>
-        <li><a class="project-card" href="https://lechat.mistral.ai/">Le Chat</a></li>
-        <li><a class="project-card" href="https://character.ai/">Character.AI</a></li>
-        <li><a class="project-card" href="https://janitorai.com/">JanitorAI</a></li>
-        <li><a class="project-card" href="https://c.ai/">c.ai</a></li>
-        <li><a class="project-card" href="https://www.phind.com/">Phind</a></li>
-        <li><a class="project-card" href="https://pi.ai/">Pi AI</a></li>
-        <li><a class="project-card" href="https://openrouter.ai/">OpenRouter</a></li>
-        <li><a class="project-card" href="https://lmarena.ai/">LM Arena</a></li>
-        <li><a class="project-card" href="https://blackbox.ai/">Blackbox AI</a></li>
-        <li><a class="project-card" href="https://writesonic.com/chat/">Writesonic Chat</a></li>
-        <li><a class="project-card" href="https://replika.com/">Replika</a></li>
-        <li><a class="project-card" href="https://flowgpt.com/">FlowGPT</a></li>
-        <li><a class="project-card" href="https://venice.ai/">Venice AI</a></li>
-        <li><a class="project-card" href="https://chat.z.ai/">Z.ai Chat</a></li>
-        <li><a class="project-card" href="https://www.hailuoai.com/">Hailuo AI</a></li>
-        <li><a class="project-card" href="https://www.doubao.com/">Doubao</a></li>
-        <li><a class="project-card" href="https://tongyi.aliyun.com/">Tongyi Qianwen</a></li>
-        <li><a class="project-card" href="https://yiyan.baidu.com/">ERNIE Bot</a></li>
-        <li><a class="project-card" href="https://chatglm.cn/">ChatGLM</a></li>
-    </ul>
+    <div class="card-container">
+        <ul>
+            <li><a class="project-card" href="https://chatgpt.com/">ChatGPT</a></li>
+            <li><a class="project-card" href="https://claude.ai/">Claude</a></li>
+            <li><a class="project-card" href="https://copilot.microsoft.com/">Microsoft Copilot</a></li>
+            <li><a class="project-card" href="https://gemini.google.com/">Google Gemini</a></li>
+            <li><a class="project-card" href="https://notebooklm.google.com/">NotebookLM</a></li>
+            <li><a class="project-card" href="https://duck.ai/">Duck.ai</a></li>
+            <li><a class="project-card" href="https://grok.com/">Grok</a></li>
+            <li><a class="project-card" href="https://www.perplexity.ai/">Perplexity</a></li>
+            <li><a class="project-card" href="https://poe.com/">Poe</a></li>
+            <li><a class="project-card" href="https://www.kimi.com/">Kimi</a></li>
+            <li><a class="project-card" href="https://chat.deepseek.com/">DeepSeek Chat</a></li>
+            <li><a class="project-card" href="https://mistral.ai/">Mistral AI</a></li>
+            <li><a class="project-card" href="https://meta.ai/">Meta AI</a></li>
+            <li><a class="project-card" href="https://www.you.com/">You.com</a></li>
+            <li><a class="project-card" href="https://huggingface.co/chat/">HuggingChat</a></li>
+            <li><a class="project-card" href="https://qwen.ai/">Qwen</a></li>
+            <li><a class="project-card" href="https://lechat.mistral.ai/">Le Chat</a></li>
+            <li><a class="project-card" href="https://character.ai/">Character.AI</a></li>
+            <li><a class="project-card" href="https://janitorai.com/">JanitorAI</a></li>
+            <li><a class="project-card" href="https://c.ai/">c.ai</a></li>
+            <li><a class="project-card" href="https://www.phind.com/">Phind</a></li>
+            <li><a class="project-card" href="https://pi.ai/">Pi AI</a></li>
+            <li><a class="project-card" href="https://openrouter.ai/">OpenRouter</a></li>
+            <li><a class="project-card" href="https://lmarena.ai/">LM Arena</a></li>
+            <li><a class="project-card" href="https://blackbox.ai/">Blackbox AI</a></li>
+            <li><a class="project-card" href="https://writesonic.com/chat/">Writesonic Chat</a></li>
+            <li><a class="project-card" href="https://replika.com/">Replika</a></li>
+            <li><a class="project-card" href="https://flowgpt.com/">FlowGPT</a></li>
+            <li><a class="project-card" href="https://venice.ai/">Venice AI</a></li>
+            <li><a class="project-card" href="https://chat.z.ai/">Z.ai Chat</a></li>
+            <li><a class="project-card" href="https://www.hailuoai.com/">Hailuo AI</a></li>
+            <li><a class="project-card" href="https://www.doubao.com/">Doubao</a></li>
+            <li><a class="project-card" href="https://tongyi.aliyun.com/">Tongyi Qianwen</a></li>
+            <li><a class="project-card" href="https://yiyan.baidu.com/">ERNIE Bot</a></li>
+            <li><a class="project-card" href="https://chatglm.cn/">ChatGLM</a></li>
+        </ul>
+    </div>
 </html>

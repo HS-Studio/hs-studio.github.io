@@ -58,6 +58,50 @@ a {
     box-sizing: border-box;
 }
 
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+    .card-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.project-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px var(--shadow);
+    background-color: var(--hover-bg);
+}
+
+.project-card h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+}
+
+.project-card p {
+    margin: 0;
+    opacity: 0.8;
+    font-size: 0.9rem;
+}
+
+
 input[type="range"] {
     background: var(--border-color);
     min-width: 100px;
@@ -92,7 +136,8 @@ input[type="range"]::-moz-range-thumb {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: var(--thumb-color);;
+    background: var(--thumb-color);
+    ;
     border: 2px solid var(--border-color);
     box-shadow: 2px 2px 5px var(--shadow);
 }
