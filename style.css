@@ -66,9 +66,15 @@ a {
     margin: 0 auto;
 }
 
+@media (width < 1024px) {
+    .card-container {
+        grid-template-columns: auto auto;
+    }
+}
+
 @media (max-width: 600px) {
     .card-container {
-        grid-template-columns: 1fr;
+        grid-template-columns: auto;
     }
 }
 
@@ -101,6 +107,9 @@ a {
     font-size: 0.9rem;
 }
 
+.project-card img {
+    border-radius: 8px;
+}
 
 input[type="range"] {
     background: var(--border-color);
