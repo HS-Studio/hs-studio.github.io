@@ -65,6 +65,9 @@
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
 
+        let animationId;
+        const motionMQL = window.matchMedia('(prefers-reduced-motion: reduce)');
+
         let particleColor = '';
         let lineColor = '';
 
@@ -72,33 +75,7 @@
         let particleCount = 80; // Anzahl der Partikel (höher = rechenintensiver)
         let connectionDistance = 128; // Max. Distanz für Linien
 
-        function onMobile() {
-            if (window.matchMedia("(max-width: 1024px)").matches) {
-                particleCount = 30; // Weniger Partikel auf Mobilgeräten
-                /* connectionDistance = 64; */
-            }
-        }
-
-        onMobile();
-
-        // Canvas an Fenstergröße anpassen
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            onMobile();
-        }
-
-        window.addEventListener('resize', resize);
-        resize();
-
-        function updateColor() {
-            particleColor = getComputedStyle(document.body).getPropertyValue('--particle-color').trim();
-        }
-
-        updateColor();
-
         const colorSchemeMQL = window.matchMedia('(prefers-color-scheme: dark)');
-        colorSchemeMQL.addEventListener('change', updateColor);
 
         class Particle {
             constructor() {
@@ -138,7 +115,39 @@
             }
         }
 
+        // Canvas an Fenstergröße anpassen
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            onMobile();
+            if (motionMQL.matches) {
+                animate();
+            }
+        }
+
+        window.addEventListener('resize', resize);
+
+        function onMobile() {
+            if (window.matchMedia("(max-width: 1024px)").matches) {
+                particleCount = 30; // Weniger Partikel auf Mobilgeräten
+                /* connectionDistance = 64; */
+            }
+        }
+
+        function updateColor() {
+            if (colorSchemeMQL.matches) {
+                particleColor = '#969696';
+            } else
+                particleColor = '#505050';
+            /* particleColor = getComputedStyle(document.body).getPropertyValue('--particle-color').trim(); */
+        }
+
+        colorSchemeMQL.addEventListener('change', updateColor);
+
+        motionMQL.addEventListener('change', animate);
+
         function animate() {
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             for (let i = 0; i < particles.length; i++) {
@@ -152,10 +161,8 @@
 
                     if (distance < connectionDistance) {
                         ctx.beginPath();
-                        /* ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance / connectionDistance})`; */
                         ctx.strokeStyle = particleColor;
                         ctx.globalAlpha = (1 - distance / connectionDistance);
-                        particleColor[3] = `${1 - distance / connectionDistance})`;
                         ctx.lineWidth = 0.5;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
@@ -165,9 +172,18 @@
                 ctx.globalAlpha = 1.0;
                 particles[i].draw();
             }
+
+            if (motionMQL.matches) {
+                cancelAnimationFrame(animationId);
+                return;
+            }
+
             requestAnimationFrame(animate);
         }
 
+        resize();
+        onMobile();
+        updateColor();
         init();
         animate();
     </script>
