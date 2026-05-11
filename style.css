@@ -165,9 +165,13 @@ input[type="range"]::-moz-range-thumb {
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  .project-card {
-    background-color: var(--card-bg-solid) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
+    .project-card {
+        background-color: var(--card-bg-solid) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    .project-card:hover {
+        background-color: var(--hover-bg) !important;
+    }
 }
