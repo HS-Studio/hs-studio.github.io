@@ -164,9 +164,9 @@
         <div class="input-group">
             <label for="hex_input"><strong>Hex-Eingabe:</strong></label>
             <div class="hex-input-container">
-                <input type="text" id="hex_input" placeholder="z.B. FF00FF" inputmode="text" pattern="[0-9A-Fa-f]{2,6}"
+                <input type="text" onkeypress="parseHexInput(event)" id="hex_input" placeholder="z.B. FF00FF" inputmode="text" pattern="[0-9A-Fa-f]{2,6}"
                     maxlength="6" autocomplete="off" autocorrect="off" autocapitalize="off">
-                <button onclick="parseHexInput()">Anwenden</button>
+                <button onclick="parseHexInput(event)">Anwenden</button>
             </div>
         </div>
 
@@ -266,7 +266,10 @@ Dezimal RGB888:   ${parseInt(hex888, 16)}`;
         }
 
         // Funktion zum Parsen der Hex-Eingabe
-        function parseHexInput() {
+        function parseHexInput(event) {
+            if (event.type === "keypress" && event.key !== "Enter") {
+                return;
+            }
             const hexValue = document.getElementById("hex_input").value.trim().replace("#", "").toUpperCase();
             let r, g, b;
 
