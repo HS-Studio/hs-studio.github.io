@@ -1,192 +1,174 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light dark">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="icon" type="image/png" href="../icons/sdf.webp" />
-    <style>
-        #particleCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background-color: var(--bg-color);
-        }
-    </style>
-    <title>Projekte</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#151923">
+    <meta name="description"
+        content="Heikos Portfolio mit ersten Arbeiten aus der Umschulung zum Mediengestalter und persönlichen Projekten. Gestaltung trifft Technik im Pixelart-Stil.">
+    <title>Heiko — Pixel Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <canvas id="particleCanvas"></canvas>
-    <header>
-        <h1>Projekte</h1>
+    <header class="site-header">
+        <a class="logo" href="#start" aria-label="Heiko, zum Anfang">
+            <span class="logo-mark" aria-hidden="true">H</span>
+            <span>HEIKO<span class="logo-suffix">.EXE</span></span>
+        </a>
+        <nav class="main-nav" aria-label="Hauptnavigation">
+            <a href="#arbeiten">Arbeiten</a>
+            <a href="#ueber-mich">Über mich</a>
+            <a href="#kontakt">Kontakt <span aria-hidden="true">↗</span></a>
+        </nav>
     </header>
-    <div class="card-container">
-        <a href="sdf_playground/" class="project-card">
-            <img src="../icons/sdf.webp" alt="Icon">
-            <h2>SDF Playground</h2>
-            <p>Experimentierfeld für Signed Distance Functions</p>
-        </a>
 
-        <a href="snake/" class="project-card">
-            <img src="../icons/snake.webp" alt="Icon">
-            <h2>Snake</h2>
-            <p>A Snake Game</p>
-        </a>
+    <main id="start">
+        <section class="hero wrap">
+            <div class="hero-copy">
+                <p class="eyebrow"><span class="status-dot"></span> Umschulung · Level 01</p>
+                <h1>KREATIV<br><span>TRIFFT</span><br>TECHNIK<span class="cursor">_</span></h1>
+                <p class="hero-intro">Hi, ich bin Heiko. Ich habe gerade meine Umschulung zum Mediengestalter Digital
+                    und Print begonnen. Hier sammle ich erste Arbeiten und eigene Ideen.</p>
+                <a class="button-pixel" href="#arbeiten">ARBEITEN ENTDECKEN <span aria-hidden="true">↓</span></a>
+            </div>
+            <div class="hero-art" aria-label="Pixelgrafik mit einem kleinen grünen Charakter vor einem Retro-Computer"
+                role="img">
+                <div class="screen-top"><span>PLAYER 01</span><span>■ ■ ■</span></div>
 
-        <a href="tft_colorpicker/" class="project-card">
-            <img src="../icons/tft.webp" alt="Icon">
-            <h2>TFT Color Picker</h2>
-            <p>Farbauswahl für TFT-Displays</p>
-        </a>
+                <img src="images/mepix.png">
+                <p class="hero-art-caption">Heiko Schulz <span>▮</span></p>
+                <span class="pixel-spark spark-one" aria-hidden="true">■</span>
+                <span class="pixel-spark spark-two" aria-hidden="true">▪</span>
+            </div>
+        </section>
 
-        <a href="eye_params/" class="project-card">
-            <img src="../icons/eye.webp" alt="Icon">
-            <h2>Eye Parameters</h2>
-            <p>Tool zur Anpassung von Augenparametern</p>
-        </a>
+        <section class="work-section wrap" id="arbeiten">
+            <div class="section-title">
+                <p class="eyebrow">Mein aktueller Spielstand</p>
+                <h2>ARBEITEN<span class="title-mark"> /</span></h2>
+            </div>
 
-        <a href="llmlist/" class="project-card">
-            <img src="https://www.google.com/s2/favicons?sz=32&domain=chatgpt.com" alt="Icon">
-            <h2>LLM List</h2>
-            <p>Alle LLMs in einer Liste</p>
-        </a>
-    </div>
+            <h3 class="group-label"><span>01</span> AUS DER UMSCHULUNG</h3>
+            <div class="project-grid school-projects">
+                <article class="project-card">
+                    <div class="project-image magazine-image">
+                        <img src="images/mg/Magazine.png" alt="Einblick in die Gestaltung eines Magazins"
+                            loading="lazy">
+                    </div>
+                    <div class="project-info">
+                        <div>
+                            <h4>Magazingestaltung</h4>
+                            <p>Layout · Typografie</p>
+                        </div>
+                        <!-- <span class="pixel-arrow" aria-hidden="true">↗</span> -->
+                    </div>
+                </article>
+                <article class="project-card">
+                    <div class="project-image badge-image pixel-preview">
+                        <img src="images/mg/Badge.svg" alt="Gestalteter Badge mit Bergmotiv" loading="lazy">
+                    </div>
+                    <div class="project-info">
+                        <div>
+                            <h4>Badge-Design</h4>
+                            <p>Illustration · Gestaltung</p>
+                        </div><!-- <span class="pixel-arrow" aria-hidden="true">↗</span> -->
+                    </div>
+                </article>
+            </div>
 
-    <footer>
-        <p></p>
+            <h3 class="group-label personal-label"><span>02</span> EIGENE PROJEKTE & EXPERIMENTE</h3>
+            <div class="project-grid personal-projects">
+                <article class="project-card">
+                    <div class="project-image pixel-preview snake-preview"
+                        aria-label="Pixelgrafik einer Schlange und eines Apfels">
+                        <img src="/images/tech/SnakeGD.png">
+                    </div>
+                    <div class="project-info">
+                        <div>
+                            <h4>Snake</h4>
+                            <p>Game UI · Programmierung</p>
+                        </div>
+                        <span class="pixel-arrow" aria-hidden="true"><a href="https://github.com/HS-Studio/">GitHub</a></span>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-image pixel-preview hardware-preview"
+                        aria-label="Pixelgrafik eines Mikrocontroller-Boards">
+                        <img src="/images/tech/DesktopBuddy.jpg">
+                    </div>
+                    <div class="project-info">
+                        <div>
+                            <h4>ESP32-Projekt</h4>
+                            <p>Hardware · Programmierung</p>
+                        </div><span class="pixel-arrow" aria-hidden="true"><a href="https://github.com/HS-Studio/">GitHub</a></span>
+                    </div>
+                </article>
+
+
+
+            </div>
+            <h3 class="group-label personal-label"><span>03</span> 3D PROJEKTE & ANIMATIONEN</h3>
+            <div class="project-grid personal-projects">
+                <article class="project-card">
+                    <div class="project-image pixel-preview desktop-preview"
+                        aria-label="Abstrakte Vorschau einer Desktop-Oberfläche">
+                    <img src="/images/3D/klemmbausteine.jpg">
+                    </div>
+                    <div class="project-info">
+                        <div>
+                            <h4>Klemmbausteine</h4>
+                            <p>Blender · Animation</p>
+                        </div>
+                        <span class="pixel-arrow" aria-hidden="true"><a href="https://www.artstation.com/heiko-schulz">ArtStation</a></span>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-image pixel-preview cube-preview" aria-label="Pixelgrafik aus drei Würfeln">
+                    <img src="/images/3D/RedRrocket.jpg">
+                    </div>
+                    <div class="project-info">
+                        <div>
+                            <h4>3D & digitale Experimente</h4>
+                            <p>Modellierung · Technik</p>
+                        </div>
+                        <span class="pixel-arrow" aria-hidden="true"><a href="https://www.artstation.com/heiko-schulz">ArtStation</a></span>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="about-section" id="ueber-mich">
+            <div class="wrap about-layout">
+                <div class="about-heading">
+                    <p class="eyebrow">PLAYER 01 · ÜBER MICH</p>
+                    <h2>NOCH AM<br><span>ANFANG.</span></h2>
+                </div>
+                <div class="about-copy">
+                    <p>Ich bin Heiko und stehe am Anfang meiner Umschulung zum Mediengestalter Digital und Print. Mich
+                        interessieren Gestaltung, digitale Medien und die technische Umsetzung.</p>
+                    <p>Auf dieser Seite sammle ich Arbeiten aus dem Unterricht und eigene Experimente. Ich lerne neue
+                        Werkzeuge kennen und probiere aus, wie aus einer Idee etwas Sichtbares wird.</p>
+                    <a class="button-pixel" href="mailto:heiko-schulz@live.de">SCHREIB MIR</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer wrap" id="kontakt">
+        <p>© 2026 HEIKO · PORTFOLIO IN ENTWICKLUNG</p>
+        <div>
+            <a href="https://github.com/HS-Studio/">GitHub</a>
+            <span> | </span>
+            <a href="https://www.artstation.com/heiko-schulz">ArtStation</a>
+        </div>
     </footer>
-    <script>
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-
-        let animationId;
-        const motionMQL = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-        let particleColor = '';
-        let lineColor = '';
-
-        let particles = [];
-        let particleCount = 80; // Anzahl der Partikel (höher = rechenintensiver)
-        let connectionDistance = 128; // Max. Distanz für Linien
-
-        const colorSchemeMQL = window.matchMedia('(prefers-color-scheme: dark)');
-
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5; // Geschwindigkeit X
-                this.vy = (Math.random() - 0.5) * 0.5; // Geschwindigkeit Y
-                this.size = Math.random() * 2 + 1;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                // Wenn Partikel Rand verlässt, auf der anderen Seite wieder rein
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = particleColor;
-                ctx.fill();
-            }
-        }
-
-        // Initialisierung
-        function init() {
-            particles = [];
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        // Canvas an Fenstergröße anpassen
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            onMobile();
-            if (motionMQL.matches) {
-                animate();
-            }
-        }
-
-        window.addEventListener('resize', resize);
-
-        function onMobile() {
-            if (window.matchMedia("(max-width: 1024px)").matches) {
-                particleCount = 30; // Weniger Partikel auf Mobilgeräten
-                /* connectionDistance = 64; */
-            }
-        }
-
-        function updateColor() {
-            if (colorSchemeMQL.matches) {
-                particleColor = '#969696';
-            } else
-                particleColor = '#505050';
-            /* particleColor = getComputedStyle(document.body).getPropertyValue('--particle-color').trim(); */
-        }
-
-        colorSchemeMQL.addEventListener('change', updateColor);
-
-        motionMQL.addEventListener('change', animate);
-
-        function animate() {
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-
-                // Linien zwischen Partikeln zeichnen
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < connectionDistance) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = particleColor;
-                        ctx.globalAlpha = (1 - distance / connectionDistance);
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-                ctx.globalAlpha = 1.0;
-                particles[i].draw();
-            }
-
-            if (motionMQL.matches) {
-                cancelAnimationFrame(animationId);
-                return;
-            }
-
-            requestAnimationFrame(animate);
-        }
-
-        resize();
-        onMobile();
-        updateColor();
-        init();
-        animate();
-    </script>
 </body>
 
 </html>
