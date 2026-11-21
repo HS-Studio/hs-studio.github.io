@@ -11,11 +11,13 @@
     --pink: #ff6b68;
     --pixel-font: "Press Start 2P", "Courier New", monospace;
     --body-font: "VT323", "Courier New", monospace;
-    --grid-bg: linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
+    --grid-bg-grad: linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
+    --grid-bg: url('data:image/svg+xml;charset=UTF-8,<svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"> <line x1="0" y1=".25" x2="10" y2=".25" stroke="rgba(255, 255, 255, .025)" stroke-width=".5" /> <line x1=".25" y1="0" x2=".25" y2="10" stroke="rgba(255, 255, 255, .025)" stroke-width=".5" /> </svg>');
 }
 
 * {
     box-sizing: border-box;
+    user-select: none;
 }
 
 html {
